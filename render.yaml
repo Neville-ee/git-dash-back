@@ -1,0 +1,25 @@
+# render.yaml — Render Blueprint for the BACKEND web service.
+# With this file in the repo, you can "New + > Blueprint" in Render and it
+# wires up the service automatically. Secrets are marked sync:false so Render
+# prompts you to paste them in the dashboard instead of reading them from git.
+
+services:
+  - type: web
+    name: github-dashboard-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: GITHUB_TOKEN
+        sync: false          # paste in dashboard — never in git
+      - key: WEBHOOK_SECRET
+        sync: false          # paste in dashboard — must match GitHub webhook
+      - key: REPOS
+        sync: false          # e.g. your-username/your-repo,your-org/app
+      - key: ALLOWED_ORIGIN
+        sync: false          # your frontend URL, e.g. https://...onrender.com
+      - key: POLL_INTERVAL
+        value: "60000"
